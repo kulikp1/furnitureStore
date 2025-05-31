@@ -43,16 +43,41 @@ label {
 }
 
 input {
-  padding: 12px 14px;
+  width: 100%;
+  padding: 12px 40px 12px 14px; /* залишаємо місце для іконки праворуч */
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
+  box-sizing: border-box;
 }
 
 input:focus {
   border-color: #666;
   outline: none;
+}
+
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.iconBtn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .error {
@@ -62,7 +87,7 @@ input:focus {
   font-weight: 500;
 }
 
-button {
+button[type="submit"] {
   padding: 14px;
   background: #111;
   color: white;
@@ -74,6 +99,14 @@ button {
   transition: background 0.3s ease;
 }
 
-button:hover {
+button[type="submit"]:hover {
   background: #333;
+}
+
+.passwordWrapper input {
+  padding-right: 40px; /* щоб іконка не перекривала текст */
+}
+
+.passwordWrapper {
+  position: relative;
 }

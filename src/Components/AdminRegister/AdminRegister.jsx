@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AdminRegister.module.css";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function AdminRegister() {
   const [form, setForm] = useState({
@@ -12,6 +13,9 @@ export default function AdminRegister() {
     email: "",
     passwordMatch: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -29,11 +33,9 @@ export default function AdminRegister() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     const updatedForm = { ...form, [name]: value };
     setForm(updatedForm);
 
-    // Email validation
     if (name === "email") {
       setErrors((prev) => ({
         ...prev,
@@ -41,7 +43,6 @@ export default function AdminRegister() {
       }));
     }
 
-    // Password match validation
     if (name === "password" || name === "confirmPassword") {
       setErrors((prev) => ({
         ...prev,
@@ -53,11 +54,57 @@ export default function AdminRegister() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleBlur = (e) => {
+    const { name } = e.target;
+
+    if (name === "email") {
+      setErrors((prev) => ({
+        ...prev,
+        email: validateEmail(form.email) ? "" : "Некоректна електронна адреса",
+      }));
+    }
+
+    if (name === "password" || name === "confirmPassword") {
+      setErrors((prev) => ({
+        ...prev,
+        passwordMatch:
+          form.password === form.confirmPassword ? "" : "Паролі не співпадають",
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!errors.email && !errors.passwordMatch) {
-      console.log("Реєстрація успішна:", form);
-      // Запит до API
+      try {
+        const response = await fetch(
+          "https://683aed4f43bb370a86742d36.mockapi.io/admin",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: form.email,
+              password: form.password,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Помилка при реєстрації");
+        }
+
+        const data = await response.json();
+        console.log("Реєстрація успішна:", data);
+        alert("Реєстрація успішна!");
+        // Очистити форму або переадресувати
+        setForm({ email: "", password: "", confirmPassword: "" });
+      } catch (error) {
+        console.error("Помилка:", error);
+        alert("Щось пішло не так. Спробуйте ще раз.");
+      }
     }
   };
 
@@ -73,6 +120,7 @@ export default function AdminRegister() {
               name="email"
               value={form.email}
               onChange={handleChange}
+              onBlur={handleBlur}
               required
             />
             {errors.email && <div className={styles.error}>{errors.email}</div>}
@@ -80,24 +128,44 @@ export default function AdminRegister() {
 
           <div className={styles.field}>
             <label>Пароль</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-            />
+            <div className={styles.passwordWrapper}>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={styles.iconBtn}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <div className={styles.field}>
             <label>Повторіть пароль</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              required
-            />
+            <div className={styles.passwordWrapper}>
+              <input
+                type={showConfirm ? "text" : "password"}
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className={styles.iconBtn}
+              >
+                {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
             {errors.passwordMatch && (
               <div className={styles.error}>{errors.passwordMatch}</div>
             )}
