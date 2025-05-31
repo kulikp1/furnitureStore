@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "../HomePage/HomePage";
 import AdminRegister from "../AdminRegister/AdminRegister";
 import AddItem from "../AddItem/AddItem";
+import ContactsPage from "../ContactsPage/ContactsPage";
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<AdminRegister />} />
         <Route path="/admin/addItem" element={<AddItem />} />
+        <Route path="/contacts" element={<ContactsPage />} />
       </Routes>
     </Router>
   );

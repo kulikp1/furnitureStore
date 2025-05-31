@@ -1,9 +1,19 @@
 import React from "react";
 import styles from "./Header.module.css";
 import { ShoppingBag } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header({ selectedCategory, onSelectCategory }) {
   const categories = ["Стільці", "Крісла", "Дивани", "Контакти"];
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (cat) => {
+    if (cat === "Контакти") {
+      navigate("/contacts");
+    } else {
+      onSelectCategory(cat);
+    }
+  };
 
   return (
     <header className={styles.header}>
@@ -16,7 +26,7 @@ export default function Header({ selectedCategory, onSelectCategory }) {
             className={`${styles.navBtn} ${
               selectedCategory === cat ? styles.active : ""
             }`}
-            onClick={() => onSelectCategory(cat)}
+            onClick={() => handleCategoryClick(cat)}
           >
             {cat}
           </button>
