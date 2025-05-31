@@ -99,3 +99,20 @@
 .submitBtn:hover {
   background: #333;
 }
+
+.switchBtn {
+  padding: 14px;
+  background: #111;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.switchBtn:hover {
+  background: #333;
+}
