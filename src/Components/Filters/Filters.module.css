@@ -1,0 +1,36 @@
+.container {
+  padding: 30px 40px 10px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 10px 18px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  background: white;
+  font-size: 14px;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.filterBtn:hover {
+  background: #f0f0f0;
+}

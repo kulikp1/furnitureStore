@@ -22,6 +22,7 @@
 
 /* Card styles */
 .card {
+  margin-top: 20px;
   background: #f7f7f5;
   border-radius: 20px;
   padding: 30px 20px;
@@ -57,9 +58,11 @@
 }
 
 .image {
+  margin-top: 20px;
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
+  border-radius: 20px;
 }
 
 .footer {
@@ -67,6 +70,7 @@
   border-radius: 12px;
   width: 100%;
   margin-top: 30px;
+  margin-bottom: 20px;
   padding: 16px 20px;
   display: flex;
   justify-content: space-between;
@@ -75,4 +79,60 @@
   font-weight: 500;
   color: #222;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.category {
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.price {
+  color: #000;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn {
+  padding: 8px 14px;
+  background: #111;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #333;
+}
+
+.btnOutline {
+  padding: 8px 14px;
+  background: transparent;
+  color: #111;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btnOutline:hover {
+  background: #f0f0f0;
 }
