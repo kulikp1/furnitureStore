@@ -121,7 +121,7 @@ export default function AdminRegister() {
 
         if (matched) {
           toast.success("Успішний вхід!");
-          navigate("/addItem");
+          navigate("/admin/addItem");
         } else {
           toast.error("Невірна пошта або пароль.");
         }
