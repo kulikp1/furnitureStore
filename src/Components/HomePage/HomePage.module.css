@@ -1,0 +1,81 @@
+.main {
+  padding: 40px;
+  background: #f6f6f4;
+  min-height: 100vh;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.filters button {
+  background: #e5e5e5;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  position: relative;
+}
+
+.tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #dcdcdc;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 10px;
+}
+
+.card img {
+  width: 100%;
+  max-height: 150px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.pagination {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.pagination span {
+  display: inline-block;
+  margin: 0 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  background: #eee;
+}
+
+.pagination .active {
+  background: #333;
+  color: white;
+}
