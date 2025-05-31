@@ -2,119 +2,93 @@ import React, { useState, useEffect } from "react";
 import styles from "./AdminRegister.module.css";
 import { Eye, EyeOff } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function AdminAuth() {
+export default function AdminRegister() {
   const [form, setForm] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const [touched, setTouched] = useState({
-    email: false,
-    password: false,
-    confirmPassword: false,
-  });
-
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-    passwordMatch: "",
-  });
-
-  const [emailExists, setEmailExists] = useState(false);
+  const [touched, setTouched] = useState({});
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [isRegister, setIsRegister] = useState(true);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-    return () => document.head.removeChild(link);
-  }, []);
+  const validate = (form) => {
+    const newErrors = {};
 
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const validatePassword = (password) => password.length >= 6;
-
-  const checkEmailExists = async (email) => {
-    try {
-      const res = await fetch(
-        `https://683aed4f43bb370a86742d36.mockapi.io/admin?email=${email}`
-      );
-      const data = await res.json();
-      const exists = data.length > 0;
-      setEmailExists(exists);
-      setErrors((prev) => ({
-        ...prev,
-        email: isRegister
-          ? exists
-            ? "Ця електронна адреса вже зареєстрована"
-            : ""
-          : !exists
-          ? "Ця пошта не зареєстрована"
-          : "",
-      }));
-    } catch (err) {
-      console.error("Помилка перевірки пошти:", err);
+    if (!form.email) newErrors.email = "Введіть електронну пошту";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = "Некоректна електронна адреса";
     }
-  };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const updatedForm = { ...form, [name]: value };
-    setForm(updatedForm);
+    if (!form.password) {
+      newErrors.password = "Введіть пароль";
+    } else if (form.password.length < 6) {
+      newErrors.password = "Пароль має містити щонайменше 6 символів";
+    }
 
-    if (name === "email") {
-      if (validateEmail(value)) {
-        checkEmailExists(value);
+    if (isRegister) {
+      if (!form.confirmPassword) {
+        newErrors.passwordMatch = "Підтвердіть пароль";
+      } else if (form.password !== form.confirmPassword) {
+        newErrors.passwordMatch = "Паролі не співпадають";
       }
     }
 
-    if (name === "password") {
-      setErrors((prev) => ({
-        ...prev,
-        password: validatePassword(value)
-          ? ""
-          : "Пароль має містити щонайменше 6 символів",
-        passwordMatch:
-          updatedForm.confirmPassword === value ? "" : "Паролі не співпадають",
-      }));
-    }
-
-    if (name === "confirmPassword") {
-      setErrors((prev) => ({
-        ...prev,
-        passwordMatch:
-          updatedForm.password === value ? "" : "Паролі не співпадають",
-      }));
-    }
+    return newErrors;
   };
 
-  const handleBlur = (e) => {
-    setTouched({ ...touched, [e.target.name]: true });
+  useEffect(() => {
+    setErrors(validate(form));
+  }, [form, isRegister]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFocus = (e) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formErrors = validate(form);
+    setErrors(formErrors);
+    setTouched({
+      email: true,
+      password: true,
+      confirmPassword: true,
+    });
 
-    const hasErrors = Object.values(errors).some((error) => error !== "");
-
-    if (hasErrors) {
+    if (Object.keys(formErrors).length > 0) {
       toast.error("Будь ласка, виправте помилки перед відправкою.");
       return;
     }
 
     if (isRegister) {
-      if (emailExists) {
-        toast.error("Ця електронна адреса вже зареєстрована.");
-        return;
-      }
-
       try {
+        const res = await fetch(
+          `https://683aed4f43bb370a86742d36.mockapi.io/admin`
+        );
+        const existing = await res.json();
+
+        if (
+          existing.some(
+            (u) => u.email.toLowerCase() === form.email.toLowerCase()
+          )
+        ) {
+          toast.error("Ця пошта вже зареєстрована.");
+          return;
+        }
+
         await fetch("https://683aed4f43bb370a86742d36.mockapi.io/admin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -124,47 +98,36 @@ export default function AdminAuth() {
           }),
         });
 
-        toast.success("Реєстрація успішна!");
+        toast.success("Адміністратора успішно зареєстровано!");
         setForm({ email: "", password: "", confirmPassword: "" });
-        setTouched({ email: false, password: false, confirmPassword: false });
+        setTouched({});
+        setIsRegister(false);
       } catch {
-        toast.error("Помилка реєстрації.");
+        toast.error("Помилка при реєстрації. Спробуйте ще раз.");
       }
     } else {
-      if (!emailExists) {
-        toast.error("Ця пошта не зареєстрована.");
-        return;
-      }
-
       try {
         const res = await fetch(
-          `https://683aed4f43bb370a86742d36.mockapi.io/admin?email=${form.email}`
+          `https://683aed4f43bb370a86742d36.mockapi.io/admin`
         );
         const users = await res.json();
-        const user = users.find((u) => u.password === form.password);
 
-        if (user) {
-          toast.success("Вхід успішний!");
-          // Можна зберегти у localStorage: localStorage.setItem("admin", JSON.stringify(user));
+        const matched = users.find(
+          (u) =>
+            u.email.toLowerCase() === form.email.toLowerCase() &&
+            u.password === form.password
+        );
+
+        if (matched) {
+          toast.success("Успішний вхід!");
+          navigate("/addItem");
         } else {
-          toast.error("Невірний пароль.");
+          toast.error("Невірна пошта або пароль.");
         }
       } catch {
-        toast.error("Помилка входу.");
+        toast.error("Помилка при вході. Спробуйте ще раз.");
       }
     }
-  };
-
-  const toggleMode = () => {
-    setIsRegister(!isRegister);
-    setErrors({
-      email: "",
-      password: "",
-      passwordMatch: "",
-    });
-    setForm({ email: "", password: "", confirmPassword: "" });
-    setTouched({ email: false, password: false, confirmPassword: false });
-    setEmailExists(false);
   };
 
   return (
@@ -174,7 +137,6 @@ export default function AdminAuth() {
         <div className={styles.heading}>
           {isRegister ? "Реєстрація адміністратора" : "Вхід адміністратора"}
         </div>
-
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
             <div className={styles.label}>Електронна пошта</div>
@@ -184,7 +146,7 @@ export default function AdminAuth() {
               name="email"
               value={form.email}
               onChange={handleChange}
-              onBlur={handleBlur}
+              onFocus={handleFocus}
               required
             />
             {touched.email && errors.email && (
@@ -201,7 +163,7 @@ export default function AdminAuth() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                onBlur={handleBlur}
+                onFocus={handleFocus}
                 required
               />
               <button
@@ -227,7 +189,7 @@ export default function AdminAuth() {
                   name="confirmPassword"
                   value={form.confirmPassword}
                   onChange={handleChange}
-                  onBlur={handleBlur}
+                  onFocus={handleFocus}
                   required
                 />
                 <button
@@ -251,11 +213,15 @@ export default function AdminAuth() {
           <button
             type="button"
             className={styles.switchBtn}
-            onClick={toggleMode}
+            onClick={() => {
+              setIsRegister(!isRegister);
+              setTouched({});
+              setErrors({});
+            }}
           >
             {isRegister
-              ? "Вже є акаунт? Увійти"
-              : "Немає акаунту? Зареєструватися"}
+              ? "Вже маєте акаунт? Увійти"
+              : "Не маєте акаунта? Зареєструватися"}
           </button>
         </form>
       </div>
