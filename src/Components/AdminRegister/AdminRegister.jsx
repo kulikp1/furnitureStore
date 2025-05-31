@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./AdminRegister.module.css";
 import { Eye, EyeOff } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminRegister() {
   const [form, setForm] = useState({
@@ -9,9 +11,16 @@ export default function AdminRegister() {
     confirmPassword: "",
   });
 
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+
   const [errors, setErrors] = useState({
-    email: "",
-    passwordMatch: "",
+    email: "Введіть електронну пошту",
+    password: "Пароль має містити щонайменше 6 символів",
+    passwordMatch: "Паролі мають співпадати",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -26,10 +35,8 @@ export default function AdminRegister() {
     return () => document.head.removeChild(link);
   }, []);
 
-  const validateEmail = (email) => {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return pattern.test(email);
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password) => password.length >= 6;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -43,79 +50,71 @@ export default function AdminRegister() {
       }));
     }
 
-    if (name === "password" || name === "confirmPassword") {
+    if (name === "password") {
+      setErrors((prev) => ({
+        ...prev,
+        password: validatePassword(value)
+          ? ""
+          : "Пароль має містити щонайменше 6 символів",
+        passwordMatch:
+          updatedForm.confirmPassword === value ? "" : "Паролі не співпадають",
+      }));
+    }
+
+    if (name === "confirmPassword") {
       setErrors((prev) => ({
         ...prev,
         passwordMatch:
-          updatedForm.password === updatedForm.confirmPassword
-            ? ""
-            : "Паролі не співпадають",
+          updatedForm.password === value ? "" : "Паролі не співпадають",
       }));
     }
   };
 
   const handleBlur = (e) => {
-    const { name } = e.target;
-
-    if (name === "email") {
-      setErrors((prev) => ({
-        ...prev,
-        email: validateEmail(form.email) ? "" : "Некоректна електронна адреса",
-      }));
-    }
-
-    if (name === "password" || name === "confirmPassword") {
-      setErrors((prev) => ({
-        ...prev,
-        passwordMatch:
-          form.password === form.confirmPassword ? "" : "Паролі не співпадають",
-      }));
-    }
+    setTouched({ ...touched, [e.target.name]: true });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!errors.email && !errors.passwordMatch) {
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+    if (!hasErrors) {
       try {
-        const response = await fetch(
-          "https://683aed4f43bb370a86742d36.mockapi.io/admin",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: form.email,
-              password: form.password,
-            }),
-          }
-        );
+        await fetch("https://683aed4f43bb370a86742d36.mockapi.io/admin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: form.email,
+            password: form.password,
+          }),
+        });
 
-        if (!response.ok) {
-          throw new Error("Помилка при реєстрації");
-        }
+        toast.success("Адміністратора успішно зареєстровано!");
 
-        const data = await response.json();
-        console.log("Реєстрація успішна:", data);
-        alert("Реєстрація успішна!");
-        // Очистити форму або переадресувати
         setForm({ email: "", password: "", confirmPassword: "" });
-      } catch (error) {
-        console.error("Помилка:", error);
-        alert("Щось пішло не так. Спробуйте ще раз.");
+        setTouched({ email: false, password: false, confirmPassword: false });
+        setErrors({
+          email: "Введіть електронну пошту",
+          password: "Пароль має містити щонайменше 6 символів",
+          passwordMatch: "Паролі мають співпадати",
+        });
+      } catch {
+        toast.error("Помилка при реєстрації. Спробуйте ще раз.");
       }
+    } else {
+      toast.error("Будь ласка, виправте помилки перед відправкою.");
     }
   };
 
   return (
     <div className={styles.page}>
+      <ToastContainer />
       <div className={styles.formContainer}>
-        <h2>Реєстрація адміністратора</h2>
+        <div className={styles.heading}>Реєстрація адміністратора</div>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.field}>
-            <label>Електронна пошта</label>
+            <div className={styles.label}>Електронна пошта</div>
             <input
+              className={styles.input}
               type="email"
               name="email"
               value={form.email}
@@ -123,13 +122,16 @@ export default function AdminRegister() {
               onBlur={handleBlur}
               required
             />
-            {errors.email && <div className={styles.error}>{errors.email}</div>}
+            {touched.email && form.email !== "" && errors.email && (
+              <div className={styles.error}>{errors.email}</div>
+            )}
           </div>
 
           <div className={styles.field}>
-            <label>Пароль</label>
+            <div className={styles.label}>Пароль</div>
             <div className={styles.passwordWrapper}>
               <input
+                className={styles.input}
                 type={showPassword ? "text" : "password"}
                 name="password"
                 value={form.password}
@@ -145,12 +147,16 @@ export default function AdminRegister() {
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
+            {touched.password && errors.password && (
+              <div className={styles.error}>{errors.password}</div>
+            )}
           </div>
 
           <div className={styles.field}>
-            <label>Повторіть пароль</label>
+            <div className={styles.label}>Підтвердження пароля</div>
             <div className={styles.passwordWrapper}>
               <input
+                className={styles.input}
                 type={showConfirm ? "text" : "password"}
                 name="confirmPassword"
                 value={form.confirmPassword}
@@ -166,12 +172,14 @@ export default function AdminRegister() {
                 {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
-            {errors.passwordMatch && (
+            {touched.confirmPassword && errors.passwordMatch && (
               <div className={styles.error}>{errors.passwordMatch}</div>
             )}
           </div>
 
-          <button type="submit">Зареєструватися</button>
+          <button className={styles.submitBtn} type="submit">
+            Зареєструватися
+          </button>
         </form>
       </div>
     </div>

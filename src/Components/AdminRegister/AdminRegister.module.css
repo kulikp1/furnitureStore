@@ -16,7 +16,7 @@
   max-width: 420px;
 }
 
-h2 {
+.heading {
   text-align: center;
   margin-bottom: 30px;
   font-size: 24px;
@@ -35,49 +35,45 @@ h2 {
   flex-direction: column;
 }
 
-label {
+.label {
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 6px;
   color: #333;
 }
 
-input {
+.input {
   width: 100%;
-  padding: 12px 40px 12px 14px; /* залишаємо місце для іконки праворуч */
+  box-sizing: border-box;
+  padding: 12px 44px 12px 14px; /* щоб не перекривалась іконкою */
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
-  box-sizing: border-box;
+  height: 44px;
 }
 
-input:focus {
+.input:focus {
   border-color: #666;
   outline: none;
 }
 
 .passwordWrapper {
   position: relative;
-  display: flex;
-  align-items: center;
+  width: 100%;
 }
 
 .iconBtn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
   background: none;
   border: none;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
   color: #666;
   padding: 0;
-  height: 24px;
-  width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 2;
 }
 
 .error {
@@ -87,7 +83,7 @@ input:focus {
   font-weight: 500;
 }
 
-button[type="submit"] {
+.submitBtn {
   padding: 14px;
   background: #111;
   color: white;
@@ -97,16 +93,9 @@ button[type="submit"] {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.3s ease;
+  width: 100%;
 }
 
-button[type="submit"]:hover {
+.submitBtn:hover {
   background: #333;
-}
-
-.passwordWrapper input {
-  padding-right: 40px; /* щоб іконка не перекривала текст */
-}
-
-.passwordWrapper {
-  position: relative;
 }
