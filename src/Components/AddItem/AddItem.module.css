@@ -1,0 +1,122 @@
+/* Базові стилі */
+* {
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  gap: 48px;
+  font-family: "Inter", sans-serif;
+  padding: 32px;
+  background-color: #f7f7f7;
+}
+
+/* КАРТКА */
+.card {
+  width: 300px;
+  height: 500px;
+  background-color: #f2f2f2;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.categoryBadge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background-color: rgba(165, 165, 150, 0.3);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.imageWrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 24px;
+}
+
+.image {
+  max-height: 200px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.bottomCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #222;
+}
+
+.price {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ФОРМА */
+.form {
+  width: 360px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-align: center;
+  color: #333;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input {
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  transition: border 0.2s;
+}
+
+.input:focus {
+  border-color: #888;
+  outline: none;
+}
