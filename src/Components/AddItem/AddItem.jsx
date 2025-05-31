@@ -3,10 +3,10 @@ import styles from "./AddItem.module.css";
 
 const AddItem = () => {
   const [item, setItem] = useState({
-    name: "AXF",
-    price: "1000,00₴",
-    category: "Chairs",
-    image: "https://i.ibb.co/1Q9Z1PM/chair.png",
+    name: "",
+    price: "",
+    category: "",
+    image: "",
   });
 
   const handleChange = (e) => {
@@ -17,8 +17,47 @@ const AddItem = () => {
     }));
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "unsigned_mebel"); // 🔁 Заміни
+    formData.append("cloud_name", "dwzh7gxwq"); // 🔁 Заміни
+
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dwzh7gxwq/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        setItem((prev) => ({
+          ...prev,
+          image: data.secure_url,
+        }));
+        alert("Зображення завантажено успішно!");
+      } else {
+        throw new Error("Не вдалося отримати URL зображення");
+      }
+    } catch (err) {
+      console.error("Помилка при завантаженні зображення:", err);
+      alert("Не вдалося завантажити зображення.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!item.image) {
+      alert("Будь ласка, завантажте зображення перед збереженням.");
+      return;
+    }
+
     try {
       const response = await fetch(
         "https://683aed4f43bb370a86742d36.mockapi.io/items",
@@ -49,7 +88,11 @@ const AddItem = () => {
       <div className={styles.card}>
         <div className={styles.categoryBadge}>{item.category}</div>
         <div className={styles.imageWrapper}>
-          <img src={item.image} alt={item.name} className={styles.image} />
+          {item.image ? (
+            <img src={item.image} alt={item.name} className={styles.image} />
+          ) : (
+            <div className={styles.imagePlaceholder}>Немає зображення</div>
+          )}
         </div>
         <div className={styles.bottomCard}>
           <div className={styles.name}>{item.name}</div>
@@ -94,12 +137,12 @@ const AddItem = () => {
         </label>
 
         <label className={styles.label}>
-          Зображення (URL)
+          Завантажити зображення
           <input
+            type="file"
+            accept="image/*"
             className={styles.input}
-            name="image"
-            value={item.image}
-            onChange={handleChange}
+            onChange={handleImageUpload}
             required
           />
         </label>
