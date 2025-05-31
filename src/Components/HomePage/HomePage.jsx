@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./HomePage.module.css";
+import NavBar from "../Navbar/Navbar";
 
 const products = [
   { name: "AXF", price: "1000,00₴", img: "https://via.placeholder.com/150" },
@@ -15,16 +16,9 @@ const products = [
 
 export default function HomePage() {
   return (
-    <main className={styles.main}>
+    <>
+      <NavBar />
       <h1 className={styles.title}>Стільці</h1>
-
-      <div className={styles.filters}>
-        <button>Тип</button>
-        <button>Матеріал</button>
-        <button>Колір</button>
-        <button>Ціна</button>
-        <button>Сортувати</button>
-      </div>
 
       <div className={styles.grid}>
         {products.map((product, i) => (
@@ -47,6 +41,6 @@ export default function HomePage() {
         <span>5</span>
         <span>→</span>
       </div>
-    </main>
+    </>
   );
 }
