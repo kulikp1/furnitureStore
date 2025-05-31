@@ -1,81 +1,78 @@
-.main {
-  padding: 40px;
-  background: #f6f6f4;
+.page {
   min-height: 100vh;
+  padding: 40px;
+  background: #f7f7f5;
+  font-family: "Inter", sans-serif;
 }
 
-.title {
-  font-size: 32px;
-  margin-bottom: 20px;
-}
-
-.filters {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 30px;
-}
-
-.filters button {
-  background: #e5e5e5;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 30px;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+.heading {
   text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  color: #222;
+  font-weight: 600;
+}
+
+.cardGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+/* Card styles */
+.card {
+  background: #f7f7f5;
+  border-radius: 20px;
+  padding: 30px 20px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   position: relative;
 }
 
-.tag {
+.category {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: #dcdcdc;
-  padding: 5px 10px;
+  top: 16px;
+  left: 16px;
+  background-color: #dcdcd6;
   font-size: 12px;
-  border-radius: 10px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  color: #444;
+  letter-spacing: 1px;
 }
 
-.card img {
+.imageWrapper {
   width: 100%;
-  max-height: 150px;
-  object-fit: contain;
-  margin-bottom: 15px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.info {
+.image {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.footer {
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  margin-top: 30px;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
-  font-weight: bold;
-}
-
-.pagination {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.pagination span {
-  display: inline-block;
-  margin: 0 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 50%;
-  background: #eee;
-}
-
-.pagination .active {
-  background: #333;
-  color: white;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
