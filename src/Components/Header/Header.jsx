@@ -23,7 +23,7 @@ export default function Header({ selectedCategory, onSelectCategory }) {
 
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>luxf</div>
+      <div className={styles.logo}>NORDIHOME</div>
 
       <nav className={styles.nav}>
         {categories.map((cat) => (

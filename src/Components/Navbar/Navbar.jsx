@@ -4,7 +4,7 @@ import styles from "./Navbar.module.css";
 export default function Navbar() {
   return (
     <header className={styles.navbar}>
-      <div className={styles.logo}>luxf</div>
+      <div className={styles.logo}>NORDIHOME</div>
       <nav>
         <a href="#">Стільці</a>
         <a href="#">Крісла</a>
