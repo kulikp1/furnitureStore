@@ -11,7 +11,10 @@ export default function Header({ selectedCategory, onSelectCategory }) {
     if (cat === "Контакти") {
       navigate("/contacts");
     } else {
-      onSelectCategory(cat);
+      if (onSelectCategory) {
+        onSelectCategory(cat);
+      }
+      navigate("/"); // ← повертаємось на головну
     }
   };
 
