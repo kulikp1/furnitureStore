@@ -8,6 +8,7 @@ import { useCart } from "../../context/CartContext";
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Стільці");
+  const [sortOrder, setSortOrder] = useState(null); // 'asc' | 'desc' | null
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
@@ -18,9 +19,21 @@ export default function HomePage() {
       .catch((err) => console.error("Fetch error:", err));
   }, []);
 
-  const filteredProducts = products.filter(
-    (item) => item.category === selectedCategory
-  );
+  const toggleSortOrder = () => {
+    setSortOrder((prev) => {
+      if (prev === "asc") return "desc";
+      if (prev === "desc") return "asc";
+      return "asc"; // починаємо з "asc"
+    });
+  };
+
+  const filteredProducts = products
+    .filter((item) => item.category === selectedCategory)
+    .sort((a, b) => {
+      if (sortOrder === "asc") return a.price - b.price;
+      if (sortOrder === "desc") return b.price - a.price;
+      return 0;
+    });
 
   const ProductCard = ({ id, category, title, price, image }) => {
     const handleAdd = () => {
@@ -61,7 +74,11 @@ export default function HomePage() {
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
       />
-      <Filters currentCategory={selectedCategory} />
+      <Filters
+        currentCategory={selectedCategory}
+        sortOrder={sortOrder}
+        onToggleSort={toggleSortOrder}
+      />
       <div className={styles.cardGrid}>
         {filteredProducts.map((item) => (
           <ProductCard
