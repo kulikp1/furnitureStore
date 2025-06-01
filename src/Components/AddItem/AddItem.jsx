@@ -7,6 +7,7 @@ const AddItem = () => {
     price: "",
     category: "",
     image: "",
+    description: "", // ✅ додано поле опису
   });
 
   const handleChange = (e) => {
@@ -132,6 +133,19 @@ const AddItem = () => {
             name="category"
             value={item.category}
             onChange={handleChange}
+            required
+          />
+        </label>
+
+        <label className={styles.label}>
+          Опис
+          <textarea
+            className={styles.input}
+            name="description"
+            value={item.description}
+            onChange={handleChange}
+            rows={4}
+            placeholder="Опишіть товар..."
             required
           />
         </label>

@@ -120,3 +120,7 @@
   border-color: #888;
   outline: none;
 }
+
+textarea {
+  resize: none;
+}
