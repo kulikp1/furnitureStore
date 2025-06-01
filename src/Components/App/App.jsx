@@ -6,6 +6,7 @@ import AddItem from "../AddItem/AddItem";
 import ContactsPage from "../ContactsPage/ContactsPage";
 import ProductDetails from "../ProductDetailsPage/ProductDetailsPage";
 import { CartProvider } from "../../context/CartContext";
+import { ToastContainer } from "react-toastify";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
         </Routes>
       </Router>
+      <ToastContainer position="top-right" autoClose={3000} />
     </CartProvider>
   );
 }
