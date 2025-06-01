@@ -2,19 +2,20 @@ import React from "react";
 import styles from "./Header.module.css";
 import { ShoppingBag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 export default function Header({ selectedCategory, onSelectCategory }) {
   const categories = ["Стільці", "Крісла", "Дивани", "Контакти"];
   const navigate = useNavigate();
+  const { cartItems } = useCart();
+  const cartCount = cartItems.length;
 
   const handleCategoryClick = (cat) => {
     if (cat === "Контакти") {
       navigate("/contacts");
     } else {
-      if (onSelectCategory) {
-        onSelectCategory(cat);
-      }
-      navigate("/"); // ← повертаємось на головну
+      if (onSelectCategory) onSelectCategory(cat);
+      navigate("/");
     }
   };
 
@@ -37,7 +38,12 @@ export default function Header({ selectedCategory, onSelectCategory }) {
       </nav>
 
       <div className={styles.icons}>
-        <ShoppingBag size={20} />
+        <div className={styles.cartIcon}>
+          <ShoppingBag size={20} />
+          {cartCount > 0 && (
+            <span className={styles.cartCount}>{cartCount}</span>
+          )}
+        </div>
       </div>
     </header>
   );

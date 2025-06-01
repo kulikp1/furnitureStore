@@ -3,11 +3,13 @@ import styles from "./HomePage.module.css";
 import Header from "../Header/Header";
 import Filters from "../Filters/Filters";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartContext";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Стільці");
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     fetch("https://683aed4f43bb370a86742d36.mockapi.io/items")
@@ -20,30 +22,38 @@ export default function HomePage() {
     (item) => item.category === selectedCategory
   );
 
-  const ProductCard = ({ id, category, title, price, image }) => (
-    <div className={styles.card}>
-      <div className={styles.imageWrapper}>
-        <img src={image} alt={title} className={styles.image} />
-      </div>
-      <span className={styles.category}>{category}</span>
+  const ProductCard = ({ id, category, title, price, image }) => {
+    const handleAdd = () => {
+      addToCart({ id, category, title, price, image });
+    };
 
-      <div className={styles.footer}>
-        <span className={styles.title}>
-          <strong>{title}</strong>
-        </span>
-        <span className={styles.price}>{price}₴</span>
+    return (
+      <div className={styles.card}>
+        <div className={styles.imageWrapper}>
+          <img src={image} alt={title} className={styles.image} />
+        </div>
+        <span className={styles.category}>{category}</span>
+
+        <div className={styles.footer}>
+          <span className={styles.title}>
+            <strong>{title}</strong>
+          </span>
+          <span className={styles.price}>{price}₴</span>
+        </div>
+        <div className={styles.buttons}>
+          <button className={styles.btn} onClick={handleAdd}>
+            Додати в кошик
+          </button>
+          <button
+            className={styles.btnOutline}
+            onClick={() => navigate(`/product/${id}`)}
+          >
+            Деталі
+          </button>
+        </div>
       </div>
-      <div className={styles.buttons}>
-        <button className={styles.btn}>Додати в кошик</button>
-        <button
-          className={styles.btnOutline}
-          onClick={() => navigate(`/product/${id}`)}
-        >
-          Деталі
-        </button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className={styles.page}>
@@ -56,7 +66,7 @@ export default function HomePage() {
         {filteredProducts.map((item) => (
           <ProductCard
             key={item.id}
-            id={item.id} // ← передаємо id сюди
+            id={item.id}
             category={item.category}
             title={item.name}
             price={item.price}

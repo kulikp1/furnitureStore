@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./ProductDetailsPage.module.css";
 import Header from "../Header/Header";
+import { useCart } from "../../context/CartContext";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     fetch(`https://683aed4f43bb370a86742d36.mockapi.io/items/${id}`)
@@ -30,7 +32,12 @@ export default function ProductDetails() {
             {product.description || "Опис товару відсутній."}
           </p>
           <div className={styles.buttons}>
-            <button className={styles.addToCart}>Додати в кошик</button>
+            <button
+              className={styles.addToCart}
+              onClick={() => addToCart(product)}
+            >
+              Додати в кошик
+            </button>
             <button className={styles.back} onClick={() => navigate(-1)}>
               Назад
             </button>
