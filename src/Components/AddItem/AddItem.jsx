@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styles from "./AddItem.module.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddItem = () => {
   const [item, setItem] = useState({
@@ -7,7 +9,7 @@ const AddItem = () => {
     price: "",
     category: "",
     image: "",
-    description: "", // ✅ додано поле опису
+    description: "",
   });
 
   const handleChange = (e) => {
@@ -18,12 +20,22 @@ const AddItem = () => {
     }));
   };
 
+  const resetForm = () => {
+    setItem({
+      name: "",
+      price: "",
+      category: "",
+      image: "",
+      description: "",
+    });
+  };
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "unsigned_mebel"); // 🔁 Заміни
-    formData.append("cloud_name", "dwzh7gxwq"); // 🔁 Заміни
+    formData.append("upload_preset", "unsigned_mebel");
+    formData.append("cloud_name", "dwzh7gxwq");
 
     try {
       const res = await fetch(
@@ -41,13 +53,13 @@ const AddItem = () => {
           ...prev,
           image: data.secure_url,
         }));
-        alert("Зображення завантажено успішно!");
+        toast.success("✅ Зображення завантажено успішно!");
       } else {
         throw new Error("Не вдалося отримати URL зображення");
       }
     } catch (err) {
       console.error("Помилка при завантаженні зображення:", err);
-      alert("Не вдалося завантажити зображення.");
+      toast.error("❌ Не вдалося завантажити зображення.");
     }
   };
 
@@ -55,7 +67,7 @@ const AddItem = () => {
     e.preventDefault();
 
     if (!item.image) {
-      alert("Будь ласка, завантажте зображення перед збереженням.");
+      toast.warn("⚠️ Будь ласка, завантажте зображення перед збереженням.");
       return;
     }
 
@@ -76,16 +88,19 @@ const AddItem = () => {
       }
 
       const data = await response.json();
-      alert("Товар додано успішно!");
+      toast.success("Товар додано успішно!");
       console.log("Збережено:", data);
+      resetForm(); // Скидання форми після успішної відправки
     } catch (error) {
-      alert("Помилка при збереженні.");
+      toast.error("Помилка при збереженні.");
       console.error(error);
     }
   };
 
   return (
     <div className={styles.container}>
+      <ToastContainer position="top-right" autoClose={3000} />
+
       <div className={styles.card}>
         <div className={styles.categoryBadge}>{item.category}</div>
         <div className={styles.imageWrapper}>
@@ -147,6 +162,7 @@ const AddItem = () => {
             rows={4}
             placeholder="Опишіть товар..."
             required
+            style={{ resize: "none" }}
           />
         </label>
 
