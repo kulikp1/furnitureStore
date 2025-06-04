@@ -8,7 +8,7 @@ import { useCart } from "../../context/CartContext";
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Стільці");
-  const [sortOrder, setSortOrder] = useState(null); // 'asc' | 'desc' | null
+  const [sortOrder, setSortOrder] = useState(null);
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
