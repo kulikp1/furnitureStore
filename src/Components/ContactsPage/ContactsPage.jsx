@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./ContactsPage.module.css"; // Використовуємо ті ж стилі
+import styles from "./ContactsPage.module.css";
 import Header from "../Header/Header";
 
 export default function ContactsPage() {
