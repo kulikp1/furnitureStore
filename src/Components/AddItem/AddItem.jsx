@@ -90,7 +90,7 @@ const AddItem = () => {
       const data = await response.json();
       toast.success("Товар додано успішно!");
       console.log("Збережено:", data);
-      resetForm(); // Скидання форми після успішної відправки
+      resetForm();
     } catch (error) {
       toast.error("Помилка при збереженні.");
       console.error(error);
