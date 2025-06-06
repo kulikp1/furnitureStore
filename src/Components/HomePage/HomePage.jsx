@@ -23,7 +23,7 @@ export default function HomePage() {
     setSortOrder((prev) => {
       if (prev === "asc") return "desc";
       if (prev === "desc") return "asc";
-      return "asc"; // починаємо з "asc"
+      return "asc";
     });
   };
 
