@@ -11,7 +11,6 @@ export function CartProvider({ children }) {
     return storedCart ? JSON.parse(storedCart) : [];
   });
 
-  // Зберігаємо cartItems у localStorage при кожній зміні
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
