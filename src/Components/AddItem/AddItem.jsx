@@ -53,13 +53,13 @@ const AddItem = () => {
           ...prev,
           image: data.secure_url,
         }));
-        toast.success("✅ Зображення завантажено успішно!");
+        toast.success("Зображення завантажено успішно!");
       } else {
         throw new Error("Не вдалося отримати URL зображення");
       }
     } catch (err) {
       console.error("Помилка при завантаженні зображення:", err);
-      toast.error("❌ Не вдалося завантажити зображення.");
+      toast.error("Не вдалося завантажити зображення.");
     }
   };
 
@@ -67,7 +67,7 @@ const AddItem = () => {
     e.preventDefault();
 
     if (!item.image) {
-      toast.warn("⚠️ Будь ласка, завантажте зображення перед збереженням.");
+      toast.warn("Будь ласка, завантажте зображення перед збереженням.");
       return;
     }
 
